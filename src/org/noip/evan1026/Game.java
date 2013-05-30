@@ -14,7 +14,9 @@ public class Game {
 	public boolean tryRemoveSelection(int rowIndex, int startIndex, int length){
 		if (canRemoveSelection(rowIndex, startIndex, length)){
 			removeSelection(rowIndex, startIndex, length);
-			checkForWin();
+			if (checkForWin()){
+				doWin();
+			}
 			return true;
 		}
 		return false;
@@ -75,7 +77,7 @@ public class Game {
 		System.out.println(_board.toString());
 	}
 	
-	private void checkForWin(){
+	private boolean checkForWin(){
 	    
 	    boolean win = true;
 	    
@@ -88,7 +90,7 @@ public class Game {
 	        }
 	    }
 	    
-	    if (win) doWin();
+	    return win;
 	}
 	
 	private void doWin(){
