@@ -101,7 +101,7 @@ public class Board {
 		String output = "";
 		int maxLength = _pieces.get(_pieces.size() - 1).length * 2;
 		
-		for (boolean[] row : getBoard()){
+		for (boolean[] row : _pieces){
 			int spaces = maxLength - row.length * 2;
 			
 			for (int i = 0; i < spaces / 2; i++){

@@ -68,9 +68,37 @@ public class Game {
 		for (int i = startIndex; i < startIndex + length; i++){
 			_board.setPiece(rowIndex, i, false);
 		}
+		player1 = !player1;
 	}
 	
 	public void printBoard(){
 		System.out.println(_board.toString());
+	}
+	
+	private void checkForWin(){
+	    
+	    boolean win = true;
+	    
+	    for (boolean[] row : getBoard()){
+	        for (int i = 0; i < row.length; i++){
+	            if (row[i]){
+	                win = false;
+	                break;
+	            }
+	        }
+	    }
+	    
+	    if (win) doWin();
+	}
+	
+	private void doWin(){
+	    if (player1){
+	        //player1 lost
+	        System.out.println("Player 2 wins!");
+	    }
+	    else{
+	        //player2 lost
+	        System.out.println("Player 1 wins!");
+	    }
 	}
 }
