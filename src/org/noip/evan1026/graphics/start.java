@@ -2,39 +2,24 @@ package org.noip.evan1026.graphics;
 
 import java.awt.Color;
 import java.awt.Toolkit;
-import java.nio.FloatBuffer;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
-import javax.swing.text.JTextComponent.KeyBinding;
-import javax.xml.crypto.dsig.keyinfo.KeyName;
 
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL41;
-import org.lwjgl.opengl.GL43;
-import org.lwjgl.opengl.GLContext;
 
-import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.glu.Cylinder;
 import org.lwjgl.util.glu.Disk;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
-import org.lwjgl.util.vector.Vector3f;
-import org.noip.evan1026.Game;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.ARBDepthClamp.GL_DEPTH_CLAMP;
 
 public class start {
 
@@ -46,22 +31,33 @@ public class start {
 
 	private static ArrayList<Projectile> projectiles;
 
-	private static Projectile currentProjectile;
 
+	private static Projectile currentProjectile;
 	private static Projectile lastProjectile;
+
+	private static ArrayList<Target> targets;
+	private static int targetRowsAmount = 5;
+	private static Point3D targetsPosition = new Point3D(-5, -3, 5);
+
+
 
 	private static boolean playerTurn; //false then true
 
-	private static float spin = 0;
+	//									Neutral		Player 1	Player 2
+	public static Color[] teamColor = {Color.GREEN, Color.RED, Color.BLUE};
 
+
+
+
+	private static float roomSpin = 0;
 
 
 
 	private static final float projectileMaxDisplacement = 50;
 
-	
+
 	private static Camera camera;
-	
+
 
 	public static void main(String[] args){
 
@@ -71,7 +67,7 @@ public class start {
 		initCamera();
 
 		while (!Display.isCloseRequested()){
-			
+
 			physicsCalculations();
 			render();
 			checkInput();
@@ -85,7 +81,7 @@ public class start {
 		System.exit(0);
 
 	}
-	
+
 	private static void initDisplay(){
 		try {
 			Display.setFullscreen(fullScreen);
@@ -97,8 +93,8 @@ public class start {
 			if (fullScreen){
 				Display.setDisplayMode(new DisplayMode(width, height));
 			}else{
-				Display.setDisplayMode(new DisplayMode((int) (width * 0.75), (int) (height * 0.75)));
-				//Display.setDisplayMode(new DisplayMode(1700, 800));
+				//Display.setDisplayMode(new DisplayMode((int) (width * 0.75), (int) (height * 0.75)));
+				Display.setDisplayMode(new DisplayMode(1700, 800));
 			}
 
 			Display.setVSyncEnabled(true);
@@ -107,7 +103,7 @@ public class start {
 			Display.setTitle("Nim");
 
 			//Display.setLocation(100, 100);
-			//Display.setLocation(1400, 100);
+			Display.setLocation(1400, 100);
 
 			Display.create();
 		} catch (LWJGLException e) {
@@ -117,9 +113,35 @@ public class start {
 	}
 
 	private static void initGame(){
-		
+
 		projectiles = new ArrayList<Projectile>();
-		
+
+		targets = new ArrayList<Target>();
+
+		float spherePadding = 0.25f;
+
+		//full width of triangle is the diameter of all the balls plus the padding at the base
+		float triFullWidth = targetRowsAmount * (Target.radius*2) + (spherePadding * (targetRowsAmount-1));
+
+		for (int triRow = 0; triRow < targetRowsAmount; triRow++){
+
+			float xPadding =  (float) ((targetRowsAmount - (triRow + 1)) / 2.0 * (Target.radius*4));
+
+			for (int triCol = 0; triCol < triRow + 1; triCol++){
+
+				targets.add(new Target(
+						new Point3D(targetsPosition.x + xPadding + (4*Target.radius * triCol),  targetsPosition.y + triRow * (spherePadding + Target.radius*2), targetsPosition.z),
+						new Rotation(0,0,0),
+						triRow,
+						triCol
+						));
+			}
+
+
+
+		}
+
+
 	}
 
 	private static void initScene(){
@@ -150,13 +172,13 @@ public class start {
 		Mouse.setGrabbed(mouseControl);
 
 	}
-	
+
 	private static void initCamera(){
-		
+
 		camera = new Camera(new Point3D(0,0,0), new Rotation(0, 0, 0), 90, Display.getWidth()/Display.getHeight(), 0.001f, 100);
 		camera.initPerspective();
 	}
-	
+
 	public static void physicsCalculations(){
 
 		for (int i = 0; i < projectiles.size(); i++){
@@ -165,7 +187,7 @@ public class start {
 					Math.abs(projectiles.get(i).getPosition().y) > projectileMaxDisplacement ||
 					Math.abs(projectiles.get(i).getPosition().x) > projectileMaxDisplacement
 					){
-				
+
 				System.out.println(projectiles.get(i));
 				projectiles.remove(i);
 				i--;
@@ -174,11 +196,27 @@ public class start {
 			projectiles.get(i).update();
 		}
 
+		for (int p = 0; p < projectiles.size(); p++){
+			if (projectiles.get(p).isStuck()) continue; //skip if stuck already
+			//this optimizes and makes it set the color only once it hits, not each loop through
+			
+			for (int t = 0; t < targets.size(); t++){
+				if (targets.get(t).isColliding(projectiles.get(p))){
+					
+					projectiles.get(p).setStuck(true); //stick projectiles to target
+					targets.get(t).setColor( (playerTurn) ? teamColor[1] : teamColor[2] );
+					
+					
+				}
+			}
+		}
+
+
 	}
 
-	
-	
-	
+
+
+
 
 
 
@@ -187,19 +225,19 @@ public class start {
 		glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		glLoadIdentity();
-		
+
 		camera.doTranslations();
-		
-		
-		
+
+
+
 
 		//render sphere room
-		renderSphere(new Point3D(0, 0, 0), Color.BLACK, GLU.GLU_LINE, new Rotation(90, 0, spin), 50, 10, 10);
+		renderSphere(new Point3D(0, 0, 0), Color.BLACK, GLU.GLU_LINE, new Rotation(90, 0, roomSpin), 50, 10, 10);
 		//round and round we go!
-		spin+=0.25;
-		spin %= 360;
+		roomSpin +=0.25;
+		roomSpin %= 360;
 
-		renderSphereTriangle(-1.0f, 0.0f, -5.0f, Color.YELLOW, 0.25f, 5, 0.25f);
+		//renderSphereTriangle(-1.0f, 0.0f, -5.0f, Color.YELLOW, 0.25f, 5, 0.25f);
 
 		Color[] cube1 = {Color.PINK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA};
 
@@ -228,12 +266,13 @@ public class start {
 		glPopMatrix(); 
 
 
-
-		for (int i = 0; i < projectiles.size(); i++){
-
-			projectiles.get(i).draw();
+		for (int i = 0; i < targets.size(); i++){
+			targets.get(i).draw();
 		}
 
+		for (int i = 0; i < projectiles.size(); i++){
+			projectiles.get(i).draw();
+		}
 
 
 		//draw Crosshair
@@ -427,40 +466,17 @@ public class start {
 		renderSphere(pos, color, drawStyle, rotation, radius, (int) (radius * 75), (int) (radius * 75));
 	}
 
-	private static void renderSphereTriangle( float x, float y, float z, Color color, float radius, int rows, float padding ){ //padding is between rows and columns
-
-		int drawStyle = GLU.GLU_LINE;
-
-		//full width of triangle is the diameter of all the balls plus the padding at the base
-		float triFullWidth = rows * (radius*2) + (padding * (rows-1));
-
-		for (int triRow = 0; triRow < rows; triRow++){
-
-			float xPadding =  (float) ((rows - (triRow + 1)) / 2.0 * (radius*4));
-
-
-			for (int triCol = 0; triCol < triRow + 1; triCol++){
-
-				renderSphere(new Point3D(xPadding + (4*radius * triCol), -1 * triRow * (padding + radius*2), z), color, drawStyle, new Rotation(0, 0, 0), radius);
-
-			}
-
-
-
-		}
-	}
-
 
 	private static void checkInput(){
 
-		
+
 		//keyboard control does not use the event buffer
 		//just real time state checking
 		camera.doKeyboardControl();
-		
+
 		camera.doMouseControl();
 
-		
+
 
 		//run through keyboard events
 		while (Keyboard.next()){ //while there are keyboard events in the event buffer
@@ -491,8 +507,7 @@ public class start {
 					//generate the velocity vector of the projectile
 					//according to the angle of the camera
 					//took a few minutes to think this through
-					
-					
+
 					float xVel, yVel, zVel;
 
 					xVel = (float) ( -1 *  degSin(camera.getRotation().yaw) * degSin(camera.getRotation().pitch + 90) );
@@ -502,10 +517,15 @@ public class start {
 					zVel = (float) ( degCos(camera.getRotation().yaw) * degSin(camera.getRotation().pitch + 90) );
 
 
-					currentProjectile = new Projectile(new Point3D(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z), new Rotation(0, 0, 0), new Point3D(xVel / 50.0f, yVel / 50.0f, zVel / 50.0f), (playerTurn) ? Color.RED : Color.GREEN, true);
+					float velocityMult = 0.05f;
 
-					System.out.println(currentProjectile);
-					
+					currentProjectile = new Projectile(
+							new Point3D(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z),
+							new Rotation(2,2,2),
+							new Point3D(xVel * velocityMult, yVel * velocityMult, zVel * velocityMult),
+							(playerTurn) ? teamColor[1] : teamColor[2]
+							);
+
 					projectiles.add(currentProjectile);
 				}else{
 
@@ -531,9 +551,7 @@ public class start {
 		return Math.cos(Math.toRadians(degrees));
 	}
 
-	private static double degTan(double degrees){
-		return Math.tan(Math.toRadians(degrees));
-	}
+
 
 
 

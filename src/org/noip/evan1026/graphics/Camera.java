@@ -4,7 +4,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.util.glu.GLU;
 
 public class Camera {
@@ -21,10 +20,6 @@ public class Camera {
 	private float aspectRatio;
 	private float zNear;
 	private float zFar;
-
-
-	private static final float pitchChange = 1f;
-	private static final float yawChange = 1f;
 
 
 
@@ -219,10 +214,6 @@ public class Camera {
 
 	private static double degCos(double degrees){
 		return Math.cos(Math.toRadians(degrees));
-	}
-
-	private static double degTan(double degrees){
-		return Math.tan(Math.toRadians(degrees));
 	}
 
 
