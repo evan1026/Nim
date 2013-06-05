@@ -99,11 +99,11 @@ public class Projectile {
 		this.spinning = spinning;
 	}
 	
-	public Point3D getLocation(){
+	public Point3D getPosition(){
 		return position;
 	}
-	public void setLocation(Point3D location){
-		this.position = location;
+	public void setPosition(Point3D position){
+		this.position = position;
 	}
 	
 	
@@ -115,10 +115,17 @@ public class Projectile {
 		this.velocity = velocities;
 	}
 	
+	public Rotation getRotation(){
+		return rotation;
+	}
+	
 	public void setRotation(Rotation rotation){
 		this.rotation = rotation;
 	}
 	
+	public String toString(){
+		return "Position: " + getPosition() + "\nRotation: " + getRotation() + "\nVelocity: " + getVelocity();
+	}
 	
 	
 }

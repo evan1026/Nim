@@ -15,6 +15,5 @@ public class Rotation {
 	
 	public String toString(){
 		return "Pitch: " + pitch + "\tYaw: " + yaw + "\tRoll: " + roll;
-		
 	}
 }
