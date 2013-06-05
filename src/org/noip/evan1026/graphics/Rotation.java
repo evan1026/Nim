@@ -1,3 +1,4 @@
+package org.noip.evan1026.graphics;
 
 public class Rotation {
 	public float pitch, yaw, roll;
