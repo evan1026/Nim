@@ -97,8 +97,8 @@ public class start {
 			if (fullScreen){
 				Display.setDisplayMode(new DisplayMode(width, height));
 			}else{
-				//Display.setDisplayMode(new DisplayMode((int) (width * 0.75), (int) (height * 0.75)));
-				Display.setDisplayMode(new DisplayMode(1700, 800));
+				Display.setDisplayMode(new DisplayMode((int) (width * 0.75), (int) (height * 0.75)));
+				//Display.setDisplayMode(new DisplayMode(1700, 800));
 			}
 
 			Display.setVSyncEnabled(true);
@@ -107,7 +107,7 @@ public class start {
 			Display.setTitle("Nim");
 
 			//Display.setLocation(100, 100);
-			Display.setLocation(1400, 100);
+			//Display.setLocation(1400, 100);
 
 			Display.create();
 		} catch (LWJGLException e) {
@@ -491,7 +491,8 @@ public class start {
 					//generate the velocity vector of the projectile
 					//according to the angle of the camera
 					//took a few minutes to think this through
-
+					
+					
 					float xVel, yVel, zVel;
 
 					xVel = (float) ( -1 *  degSin(camera.getRotation().yaw) * degSin(camera.getRotation().pitch + 90) );
@@ -503,6 +504,8 @@ public class start {
 
 					currentProjectile = new Projectile(new Point3D(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z), new Rotation(0, 0, 0), new Point3D(xVel / 50.0f, yVel / 50.0f, zVel / 50.0f), (playerTurn) ? Color.RED : Color.GREEN, true);
 
+					System.out.println(currentProjectile);
+					
 					projectiles.add(currentProjectile);
 				}else{
 

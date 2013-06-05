@@ -1,4 +1,5 @@
 import org.noip.evan1026.Game;
+import org.noip.evan1026.graphics.start;
 
 
 public class Nim {
@@ -8,9 +9,9 @@ public class Nim {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Game game = new Game(5);
-		game.printBoard();
-		
+		//Game game = new Game(5);
+		//game.printBoard();
+		start.main(args);
 		
 	}
 

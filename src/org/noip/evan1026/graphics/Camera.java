@@ -21,11 +21,11 @@ public class Camera {
 	private float aspectRatio;
 	private float zNear;
 	private float zFar;
-	
-	
+
+
 	private static final float pitchChange = 1f;
 	private static final float yawChange = 1f;
-	
+
 
 
 	public Camera(Point3D position, Rotation rotation, float yFOV, float aspRatio, float zNear, float zFar){
@@ -83,12 +83,32 @@ public class Camera {
 			boolean backward = Keyboard.isKeyDown(Keyboard.KEY_S) || Keyboard.isKeyDown(Keyboard.KEY_DOWN);
 
 
-			position.x += (left) ? speed : (right) ? -speed : 0;
-
 			position.y += (ascend) ? -speed : (descend) ? speed: 0;
+			//position.x += (left) ? speed : (right) ? -speed : 0;
 
-			position.z += (forward) ? speed : (backward) ? -speed : 0;			
-			
+			if (forward){
+				position.x += ( -speed *  degSin(getRotation().yaw));
+
+				position.z += (speed * degCos(getRotation().yaw));
+			}
+			else if (backward){
+				position.x -= ( -speed *  degSin(getRotation().yaw));
+
+				position.z -= (speed * degCos(getRotation().yaw));
+			}
+			if (left){
+				position.x += ( -speed *  degSin(getRotation().yaw - 90));
+
+				position.z += (speed * degCos(getRotation().yaw - 90));
+			}
+			else if  (right){
+				position.x += ( -speed *  degSin(getRotation().yaw + 90));
+
+				position.z += (speed * degCos(getRotation().yaw + 90));
+			}
+
+			//position.z += (forward) ? speed : (backward) ? -speed : 0;			
+
 		}
 
 
@@ -115,84 +135,95 @@ public class Camera {
 		}
 
 
-}
+	}
 
 
-public Point3D getPosition(){
-	return position;
-}
+	public Point3D getPosition(){
+		return position;
+	}
 
-public void setPositon(Point3D position){
-	this.position = new Point3D(position.x, position.y, position.z);
-}
+	public void setPositon(Point3D position){
+		this.position = new Point3D(position.x, position.y, position.z);
+	}
 
-public Rotation getRotation(){
-	return rotation;
-}
+	public Rotation getRotation(){
+		return rotation;
+	}
 
-public void setRotation(Rotation rotation){
-	this.rotation = new Rotation(rotation.pitch, rotation.yaw, rotation.roll);
-}
+	public void setRotation(Rotation rotation){
+		this.rotation = new Rotation(rotation.pitch, rotation.yaw, rotation.roll);
+	}
 
-public boolean isMovable() {
-	return movable;
-}
-
-
-public void setMovable(boolean movable) {
-	this.movable = movable;
-}
+	public boolean isMovable() {
+		return movable;
+	}
 
 
-public float getSpeed() {
-	return speed;
-}
+	public void setMovable(boolean movable) {
+		this.movable = movable;
+	}
 
 
-public void setSpeed(float speed) {
-	this.speed = speed;
-}
+	public float getSpeed() {
+		return speed;
+	}
 
 
-public float getyFOV() {
-	return yFOV;
-}
+	public void setSpeed(float speed) {
+		this.speed = speed;
+	}
 
 
-public void setyFOV(float yFOV) {
-	this.yFOV = yFOV;
-}
+	public float getyFOV() {
+		return yFOV;
+	}
 
 
-public float getAspectRatio() {
-	return aspectRatio;
-}
+	public void setyFOV(float yFOV) {
+		this.yFOV = yFOV;
+	}
 
 
-public void setAspectRatio(float aspectRatio) {
-	this.aspectRatio = aspectRatio;
-}
+	public float getAspectRatio() {
+		return aspectRatio;
+	}
 
 
-public float getzNear() {
-	return zNear;
-}
+	public void setAspectRatio(float aspectRatio) {
+		this.aspectRatio = aspectRatio;
+	}
 
 
-public void setzNear(float zNear) {
-	this.zNear = zNear;
-}
+	public float getzNear() {
+		return zNear;
+	}
 
 
-public float getzFar() {
-	return zFar;
-}
+	public void setzNear(float zNear) {
+		this.zNear = zNear;
+	}
 
 
-public void setzFar(float zFar) {
-	this.zFar = zFar;
-}
+	public float getzFar() {
+		return zFar;
+	}
 
+
+	public void setzFar(float zFar) {
+		this.zFar = zFar;
+	}
+
+	private static double degSin(double degrees){
+		return Math.sin(Math.toRadians(degrees));
+	}
+
+	private static double degCos(double degrees){
+		return Math.cos(Math.toRadians(degrees));
+	}
+
+	private static double degTan(double degrees){
+		return Math.tan(Math.toRadians(degrees));
+	}
 
 
 
