@@ -8,12 +8,8 @@ public class Nim {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Game game = new Game(10);
+		Game game = new Game(5);
 		game.printBoard();
-		for (int i = 0; i < 10; i++){
-		    game.tryRemoveSelection(i, 0, i + 1);
-		    game.printBoard();
-		}
 		
 		
 	}
