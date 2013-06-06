@@ -110,7 +110,7 @@ public class Projectile {
 				new Point3D(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z),
 				new Rotation(2,2,2),
 				new Point3D(xVel * velocityMult, yVel * velocityMult, zVel * velocityMult),
-				(start.getPlayerTurn()) ? start.teamColor[1] : start.teamColor[2]
+				(start.game.getPlayer()) ? start.teamColor[1] : start.teamColor[2]
 				);
 		
 		

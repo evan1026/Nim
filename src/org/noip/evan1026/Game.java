@@ -40,7 +40,16 @@ public class Game {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * 
+	 * @return Boolean representing the current player taking a turn
+	 */
+	
+	public boolean getPlayer(){
+		return _player1;
+	}
+	
 
 	/**
 	 * 

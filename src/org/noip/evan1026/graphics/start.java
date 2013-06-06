@@ -24,7 +24,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class start {
 
-	private static Game game;
+	public static Game game;
 	
 	
 	private static Camera camera;
@@ -45,7 +45,7 @@ public class start {
 	private static ArrayList<Rope> ropes;
 
 
-	private static boolean playerTurn; //false then true
+	private static boolean playerTurn = true; //false then true
 
 	//									Neutral		Player 1	Player 2
 	public static Color[] teamColor = {Color.GREEN, Color.RED, Color.BLUE};
@@ -206,7 +206,11 @@ public class start {
 				}
 			}
 		}
-
+		
+		
+		//TODO do stuff to targets here taking info from game logic
+		
+		
 
 		for (int i = 0; i < ropes.size(); i++){
 			Projectile[] attachedProjs = ropes.get(i).getAttachedProjectiles();
@@ -601,8 +605,9 @@ public class start {
 	
 		int tempDiffCol = Math.abs(target2.getColomn() - target1.getColomn());
 		
+		//ADD ONE TO THE DIFFERNCE BECAUSE ITS LENGTH FEPFWOFMWIOFCNMQOIF
 		
-		return game.tryRemoveSelection(tempRow, target1.getColomn(), tempDiffCol);
+		return game.tryRemoveSelection(tempRow, target1.getColomn(), tempDiffCol + 1);
 		
 	}
 	
