@@ -1,10 +1,11 @@
 package org.noip.evan1026.graphics;
 
+
+import org.noip.evan1026.*;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-
 
 
 import org.lwjgl.LWJGLException;
@@ -23,22 +24,25 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class start {
 
-
-
+	private static Game game;
+	
+	
+	private static Camera camera;
 	private static boolean mouseControl = true;
-
 	private static boolean fullScreen = false;
+
 
 	private static ArrayList<Projectile> projectiles;
 
+	private static Projectile firstProjectile;
+	private static Projectile secondProjectile;
 
-	private static Projectile currentProjectile;
-	private static Projectile lastProjectile;
 
 	private static ArrayList<Target> targets;
-	private static int targetRowsAmount = 5;
 	private static Point3D targetsPosition = new Point3D(-5, -3, 5);
 
+
+	private static ArrayList<Rope> ropes;
 
 
 	private static boolean playerTurn; //false then true
@@ -46,17 +50,10 @@ public class start {
 	//									Neutral		Player 1	Player 2
 	public static Color[] teamColor = {Color.GREEN, Color.RED, Color.BLUE};
 
-
+	private static int boardSize = 5;
 
 
 	private static float roomSpin = 0;
-
-
-
-	private static final float projectileMaxDisplacement = 50;
-
-
-	private static Camera camera;
 
 
 	public static void main(String[] args){
@@ -114,18 +111,22 @@ public class start {
 
 	private static void initGame(){
 
+		game = new Game(boardSize);
+		
 		projectiles = new ArrayList<Projectile>();
 
 		targets = new ArrayList<Target>();
 
+		ropes = new ArrayList<Rope>();
+
 		float spherePadding = 0.25f;
 
 		//full width of triangle is the diameter of all the balls plus the padding at the base
-		float triFullWidth = targetRowsAmount * (Target.radius*2) + (spherePadding * (targetRowsAmount-1));
+		float triFullWidth = boardSize * (Target.radius*2) + (spherePadding * (boardSize-1));
 
-		for (int triRow = 0; triRow < targetRowsAmount; triRow++){
+		for (int triRow = 0; triRow < boardSize; triRow++){
 
-			float xPadding =  (float) ((targetRowsAmount - (triRow + 1)) / 2.0 * (Target.radius*4));
+			float xPadding =  (float) ((boardSize - (triRow + 1)) / 2.0 * (Target.radius*4));
 
 			for (int triCol = 0; triCol < triRow + 1; triCol++){
 
@@ -182,13 +183,9 @@ public class start {
 	public static void physicsCalculations(){
 
 		for (int i = 0; i < projectiles.size(); i++){
-			//remove the far gone projectile
-			if (	Math.abs(projectiles.get(i).getPosition().z) > projectileMaxDisplacement ||
-					Math.abs(projectiles.get(i).getPosition().y) > projectileMaxDisplacement ||
-					Math.abs(projectiles.get(i).getPosition().x) > projectileMaxDisplacement
-					){
 
-				System.out.println(projectiles.get(i));
+			//remove the far gone projectiles or ones with a dead partner... *sniffle*
+			if (projectiles.get(i).isOutOfZone() || projectiles.get(i).isToBeDestroyed()){
 				projectiles.remove(i);
 				i--;
 				continue;
@@ -196,22 +193,72 @@ public class start {
 			projectiles.get(i).update();
 		}
 
+
+
 		for (int p = 0; p < projectiles.size(); p++){
 			if (projectiles.get(p).isStuck()) continue; //skip if stuck already
-			//this optimizes and makes it set the color only once it hits, not each loop through
-			
+			//this optimizes and makes it set the color only once it hits, not each loop through	
 			for (int t = 0; t < targets.size(); t++){
 				if (targets.get(t).isColliding(projectiles.get(p))){
-					
-					projectiles.get(p).setStuck(true); //stick projectiles to target
-					targets.get(t).setColor( (playerTurn) ? teamColor[1] : teamColor[2] );
-					
-					
+
+					projectiles.get(p).setStuck(true, targets.get(t)); //stick projectiles to target
+
 				}
 			}
 		}
 
 
+		for (int i = 0; i < ropes.size(); i++){
+			Projectile[] attachedProjs = ropes.get(i).getAttachedProjectiles();
+			
+			//remove ropes that have lost a partner :(
+			if (ropes.get(i).lostProjectile()){
+				for (int p = 0; p < attachedProjs.length; p++){
+					if (attachedProjs[p] != null){
+						attachedProjs[p].setToBeDestroyed(true);
+					}
+				}
+				ropes.remove(i);
+				i--;
+				continue;
+			}
+			
+			if (attachedProjs[0].getTargetStuckTo() == null || attachedProjs[1].getTargetStuckTo() == null) continue;
+
+			
+			boolean tempProjZeroIsLaterColomn = (attachedProjs[0].getTargetStuckTo().getColomn() > attachedProjs[1].getTargetStuckTo().getColomn());
+			
+			Target target1 = (tempProjZeroIsLaterColomn) ? attachedProjs[1].getTargetStuckTo() :  attachedProjs[0].getTargetStuckTo();
+			Target target2 = (tempProjZeroIsLaterColomn) ? attachedProjs[0].getTargetStuckTo() :  attachedProjs[1].getTargetStuckTo();
+			
+			//TODO check if targets are already occupied!!!!
+			
+			if (tryDoGameMove(target1, target2)){
+				
+				ropes.get(i).setSolidified(true);
+				
+				
+				//target1.setCaptured( (playerTurn) ? 1 : 2 );
+				//TODO color the targets
+				
+			}else{
+				//remove the balls
+				attachedProjs[0].setToBeDestroyed(true);
+				attachedProjs[1].setToBeDestroyed(true);
+			}
+			
+			
+//			targets.get(t).setColor( (playerTurn) ? teamColor[1] : teamColor[2] );
+			
+				
+		}
+		
+		
+		//end of rope loop
+		
+		
+		
+		
 	}
 
 
@@ -229,10 +276,8 @@ public class start {
 		camera.doTranslations();
 
 
-
-
 		//render sphere room
-		renderSphere(new Point3D(0, 0, 0), Color.BLACK, GLU.GLU_LINE, new Rotation(90, 0, roomSpin), 50, 10, 10);
+		renderSphere(new Point3D(0, 0, 0), Color.BLACK, GLU.GLU_LINE, new Rotation(90, 0, roomSpin), Projectile.projectileMaxDisplacement, 10, 10);
 		//round and round we go!
 		roomSpin +=0.25;
 		roomSpin %= 360;
@@ -274,6 +319,9 @@ public class start {
 			projectiles.get(i).draw();
 		}
 
+		for (int i = 0; i < ropes.size(); i++){
+			ropes.get(i).draw();
+		}
 
 		//draw Crosshair
 		glLoadIdentity();
@@ -490,6 +538,10 @@ public class start {
 
 		}
 		while (Mouse.next()){ //event is whenever the mouse moves, or is clicked
+			if (Mouse.getEventButton() == 2 && Mouse.getEventButtonState() && mouseControl){
+				Mouse.setGrabbed(!Mouse.isGrabbed());
+			}
+			
 			/*
 			 * Event Buttons:
 			 *-1 : none
@@ -499,55 +551,71 @@ public class start {
 			 * 3 : Back (ignore, few people have 3 or 4)
 			 * 4 : Forward  
 			 */
-			if (Mouse.getEventButton() == 0){ //only check mouse clicks
+			if (Mouse.getEventButton() == 0 ){ //only check mouse clicks
+
+				
+				//Generate a projectile on click and release
+				
+				
 
 				if (Mouse.getEventButtonState()){
-					lastProjectile = currentProjectile;
-
-					//generate the velocity vector of the projectile
-					//according to the angle of the camera
-					//took a few minutes to think this through
-
-					float xVel, yVel, zVel;
-
-					xVel = (float) ( -1 *  degSin(camera.getRotation().yaw) * degSin(camera.getRotation().pitch + 90) );
-
-					yVel = (float) ( -1 *  degCos(camera.getRotation().pitch + 90) );
-
-					zVel = (float) ( degCos(camera.getRotation().yaw) * degSin(camera.getRotation().pitch + 90) );
-
-
-					float velocityMult = 0.05f;
-
-					currentProjectile = new Projectile(
-							new Point3D(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z),
-							new Rotation(2,2,2),
-							new Point3D(xVel * velocityMult, yVel * velocityMult, zVel * velocityMult),
-							(playerTurn) ? teamColor[1] : teamColor[2]
-							);
-
-					projectiles.add(currentProjectile);
+					firstProjectile = Projectile.createProjectileFromCamera(camera);
+					projectiles.add(firstProjectile);
 				}else{
+					secondProjectile = Projectile.createProjectileFromCamera(camera);
+					projectiles.add(secondProjectile);
 
-
+					
+					ropes.add(new Rope(firstProjectile, secondProjectile));
 				}
+				
+				destroyOpposition();
+				
 
+				
+				
 			}
-
-
-			if (Mouse.getEventButton() == 2 && Mouse.getEventButtonState() && mouseControl){
-				Mouse.setGrabbed(!Mouse.isGrabbed());
-			}
+			
+			
 
 		}
 
 	}
+	
+	public static void destroyOpposition(){
+		
+		for (int i = 0; i < projectiles.size(); i++){
+			if ( ( !projectiles.get(i).isStuck() )  && !( firstProjectile == projectiles.get(i) || secondProjectile == projectiles.get(i) ) ){
+				projectiles.get(i).setToBeDestroyed(true);
+			}
+		}
+		
+	}
+	
+	
+	public static boolean tryDoGameMove(Target target1, Target target2){
+		
+		if (target1.getRow() != target2.getRow()) return false;
+		
+		int tempRow = target1.getRow();
+	
+		int tempDiffCol = Math.abs(target2.getColomn() - target1.getColomn());
+		
+		
+		return game.tryRemoveSelection(tempRow, target1.getColomn(), tempDiffCol);
+		
+	}
+	
+	
+	public static boolean getPlayerTurn(){
+		return playerTurn;
+	}
 
-	private static double degSin(double degrees){
+	public static double degSin(double degrees){
 		return Math.sin(Math.toRadians(degrees));
 	}
 
-	private static double degCos(double degrees){
+	public static double degCos(double degrees){
 		return Math.cos(Math.toRadians(degrees));
 	}
 

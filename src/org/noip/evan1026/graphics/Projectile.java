@@ -33,11 +33,17 @@ public class Projectile {
 
 	private static int drawStyle = GLU.GLU_LINE; 
 
-
+	public static final float projectileMaxDisplacement = 50;
+	
 	private double speedConstant = 2.0;
 
 	private boolean stuck = false;
+	
+	private Target targetStuckTo = null;
 
+	
+	private boolean toBeDestroyed = false;
+	
 
 	public Projectile(){
 
@@ -88,14 +94,65 @@ public class Projectile {
 	}
 
 	
+	public static Projectile createProjectileFromCamera(Camera camera){
+		
+		
+		//generate the velocity vector of the projectile
+		//according to the angle of the camera
+		//took a few minutes to think this through
+		float xVel, yVel, zVel;
+		xVel = (float) ( -1 *  start.degSin(camera.getRotation().yaw) * start.degSin(camera.getRotation().pitch + 90) );
+		yVel = (float) ( -1 *  start.degCos(camera.getRotation().pitch + 90) );
+		zVel = (float) ( start.degCos(camera.getRotation().yaw) * start.degSin(camera.getRotation().pitch + 90) );
+		float velocityMult = 0.05f;
+		
+		Projectile tempProjectile = new Projectile(
+				new Point3D(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z),
+				new Rotation(2,2,2),
+				new Point3D(xVel * velocityMult, yVel * velocityMult, zVel * velocityMult),
+				(start.getPlayerTurn()) ? start.teamColor[1] : start.teamColor[2]
+				);
+		
+		
+		return tempProjectile;
+		
+	}
+	
+	public boolean isOutOfZone(){
+		float projDist = (float) Math.sqrt(Math.pow(this.getPosition().x, 2) + Math.pow(this.getPosition().y, 2) + Math.pow(this.getPosition().z, 2));
+		
+		return projDist > projectileMaxDisplacement;
+	}
+	
+	public void setToBeDestroyed(boolean destroy){
+		toBeDestroyed = destroy;
+	}
+	
+	public boolean isToBeDestroyed(){
+		return toBeDestroyed;
+	}
+	
+	public Target getTargetStuckTo(){
+		return targetStuckTo;
+	}
+	
+	
 	public boolean isStuck(){
 		return stuck;
 	}
 	
-	public void setStuck(boolean stuck){
+	public void setStuck(boolean stuck, Target target){
 		this.stuck = stuck;
+		targetStuckTo = target;
 	}
-
+	
+	public Color getColor(){
+		return color;
+	}
+	
+	public void setColor(Color color){
+		this.color = color;
+	}
 
 	public Point3D getPosition(){
 		return position;

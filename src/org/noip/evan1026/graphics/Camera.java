@@ -13,7 +13,7 @@ public class Camera {
 	private Rotation rotation;
 
 	private boolean movable = true;
-	private float speed = 0.05f;
+	private float speed = 0.1f;
 
 
 	private float yFOV;

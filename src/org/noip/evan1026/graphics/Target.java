@@ -31,6 +31,8 @@ public class Target {
 
 	//initial is 0
 	private Color color = start.teamColor[0];
+	
+	private int capturedSide = -1; //-1 = no one
 
 	public Target(Point3D position, Rotation rotation, int row, int colomn){
 
@@ -82,6 +84,15 @@ public class Target {
 	}
 
 
+	public int getCaptured(){
+		return capturedSide;
+	}
+	
+	public void setCaptured(int i){
+		if (i != 0 || i != 1 || i!= 2) return;
+		capturedSide = i;
+		setColor(start.teamColor[i]);
+	}
 
 	public Point3D getPosition(){
 		return position;
@@ -105,6 +116,15 @@ public class Target {
 	public Color getColor(){
 		return color;
 	}
+	
+	public int getRow(){
+		return row;
+	}
+	
+	public int getColomn(){
+		return colomn;
+	}
+	
 
 	public String toString(){
 		return "Position: " + getPosition() + "\nRotation: " + getRotation();
