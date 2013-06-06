@@ -80,6 +80,9 @@ public class Game {
 		return _board.getPiece(row, index);
 	}
 
+	/**
+	 * Prints the board status to the console. Was only used for testing purposes; not actually called in final code.
+	 */
 	public void printBoard(){
 		System.out.println(_board.toString());
 	}
@@ -138,6 +141,10 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return If the game has been won
+	 */
 	public boolean isWon(){
 		return _won;
 	}
