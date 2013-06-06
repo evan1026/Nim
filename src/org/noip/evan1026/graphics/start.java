@@ -233,7 +233,7 @@ public class start {
 			
 			//TODO check if targets are already occupied!!!!
 			
-			if (tryDoGameMove(target1, target2)){
+			if (ropes.get(i).isSolidified() || tryDoGameMove(target1, target2)){
 				
 				ropes.get(i).setSolidified(true);
 				
