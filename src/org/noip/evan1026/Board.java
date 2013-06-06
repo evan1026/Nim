@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 public class Board {
 	
-	private ArrayList<boolean[]> _pieces;
+	private ArrayList<int[]> _pieces;
+	
+	public static int PLAYER_NEUTRAL = 0;
+	public static int PLAYER_ONE     = 1;
+	public static int PLAYER_TWO     = 2;
 	
 	/**
 	 * Calls the other constructor, sending 5 as the size.
@@ -19,13 +23,13 @@ public class Board {
 	 * @param size The amount of rows to have
 	 */
 	public Board(int size){
-		_pieces = new ArrayList<boolean[]>();
+		_pieces = new ArrayList<int[]>();
 		
 		for (int i = 0; i < size; i++){
-			_pieces.add(i, new boolean[i + 1]);
+			_pieces.add(i, new int[i + 1]);
 			
 			for (int j = 0; j < _pieces.get(i).length; j++){
-				_pieces.get(i)[j] = true;
+				_pieces.get(i)[j] = PLAYER_NEUTRAL;
 			}
 		}
 	}
@@ -34,11 +38,11 @@ public class Board {
 	 * 
 	 * @return The whole board, as an {@link ArrayList} of boolean arrays
 	 */
-	public ArrayList<boolean[]> getBoard(){
+	public ArrayList<int[]> getBoard(){
 		return _pieces;
 	}
 	
-	protected void setBoard(ArrayList<boolean[]> value){
+	protected void setBoard(ArrayList<int[]> value){
 		_pieces = value;
 	}
 	
@@ -47,7 +51,7 @@ public class Board {
 	 * @param row Zero based
 	 * @return the row, as a boolean[]
 	 */
-	public boolean[] getRow(int row){
+	public int[] getRow(int row){
 		
 		if (row >= _pieces.size()){
 			throw new IndexOutOfBoundsException(row + " is greater than the ArrayList's max index of " + (_pieces.size() - 1));
@@ -56,7 +60,7 @@ public class Board {
 		return _pieces.get(row);
 	}
 	
-	protected void setRow(int row, boolean[] value){
+	protected void setRow(int row, int[] value){
 		if (row >= _pieces.size()){
 			throw new IndexOutOfBoundsException(row + " is greater than the ArrayList's max index of " + (_pieces.size() - 1));
 		}
@@ -71,7 +75,7 @@ public class Board {
 	 * @return the piece, as a boolean
 	 */
 	
-	public boolean getPiece(int row, int index){
+	public int getPiece(int row, int index){
 		
 		if (row >= _pieces.size()){
 			throw new IndexOutOfBoundsException(row + " is greater than the ArrayList's max index of " + (_pieces.size() - 1));
@@ -84,7 +88,7 @@ public class Board {
 		return _pieces.get(row)[index];
 	}
 	
-	protected void setPiece(int row, int index, boolean value){
+	protected void setPiece(int row, int index, int value){
 		if (row >= _pieces.size()){
 			throw new IndexOutOfBoundsException(row + " is greater than the ArrayList's max index of " + (_pieces.size() - 1));
 		}
@@ -101,15 +105,15 @@ public class Board {
 		String output = "";
 		int maxLength = _pieces.get(_pieces.size() - 1).length * 2;
 		
-		for (boolean[] row : _pieces){
+		for (int[] row : _pieces){
 			int spaces = maxLength - row.length * 2;
 			
 			for (int i = 0; i < spaces / 2; i++){
 				output += " ";
 			}
 			
-			for (boolean piece : row){
-				output += piece ? "t " : "f ";
+			for (int piece : row){
+				output += piece + " ";
 			}
 			
 			output += "\n";

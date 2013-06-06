@@ -55,7 +55,7 @@ public class Game {
 	 * 
 	 * @return The whole board, as an {@link ArrayList} of boolean arrays
 	 */
-	public ArrayList<boolean[]> getBoard(){
+	public ArrayList<int[]> getBoard(){
 		return _board.getBoard();
 	}
 
@@ -64,7 +64,7 @@ public class Game {
 	 * @param row Zero based
 	 * @return the row, as a boolean[]
 	 */
-	public boolean[] getRow(int row){
+	public int[] getRow(int row){
 		return _board.getRow(row);
 	}
 
@@ -74,7 +74,7 @@ public class Game {
 	 * @param index Zero based
 	 * @return the piece, as a boolean
 	 */
-	public boolean getPiece(int row, int index){
+	public int getPiece(int row, int index){
 		return _board.getPiece(row, index);
 	}
 
@@ -91,7 +91,7 @@ public class Game {
 
 		boolean canRemove = true;
 		for (int i = startIndex; i < startIndex + length; i++){
-			if (!getPiece(rowIndex, i)){
+			if (getPiece(rowIndex, i) != Board.PLAYER_NEUTRAL){
 				canRemove = false;
 			}
 		}
@@ -101,7 +101,7 @@ public class Game {
 
 	private void removeSelection(int rowIndex, int startIndex, int length){
 		for (int i = startIndex; i < startIndex + length; i++){
-			_board.setPiece(rowIndex, i, false);
+			_board.setPiece(rowIndex, i, _player1 ? Board.PLAYER_ONE : Board.PLAYER_TWO);
 		}
 		_lines.add(new Line(rowIndex, startIndex, startIndex + length));
 		_player1 = !_player1;
@@ -111,9 +111,9 @@ public class Game {
 
 		boolean win = true;
 
-		for (boolean[] row : getBoard()){
+		for (int[] row : getBoard()){
 			for (int i = 0; i < row.length; i++){
-				if (row[i]){
+				if (row[i] == Board.PLAYER_NEUTRAL){
 					win = false;
 					break;
 				}
