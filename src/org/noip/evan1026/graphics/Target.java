@@ -10,6 +10,7 @@ import java.awt.Color;
 
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
+import org.noip.evan1026.Game;
 
 public class Target {
 
@@ -28,9 +29,6 @@ public class Target {
 
 
 	private static int drawStyle = GLU.GLU_LINE; 
-
-	//initial is 0
-	private Color color = start.teamColor[0];
 	
 	private int capturedSide = -1; //-1 = no one
 
@@ -54,8 +52,10 @@ public class Target {
 		glRotatef(rotation.pitch, 1, 0, 0);
 		glRotatef(rotation.yaw, 0, 1, 0);
 		glRotatef(rotation.roll, 0, 0, 1);
-
-		glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
+		
+		Color capColor = start.teamColor[ start.game.getPiece(row, colomn) ];
+		
+		glColor3f(capColor.getRed()/255.0f, capColor.getGreen()/255.0f, capColor.getBlue()/255.0f);
 		Sphere s = new Sphere();
 
 		s.setDrawStyle(drawStyle);
@@ -87,12 +87,6 @@ public class Target {
 	public int getCaptured(){
 		return capturedSide;
 	}
-	
-	public void setCaptured(int i){
-		if (i != 0 || i != 1 || i!= 2) return;
-		capturedSide = i;
-		setColor(start.teamColor[i]);
-	}
 
 	public Point3D getPosition(){
 		return position;
@@ -107,14 +101,6 @@ public class Target {
 
 	public void setRotation(Rotation rotation){
 		this.rotation = rotation;
-	}
-	
-	public void setColor(Color color){
-		this.color = color;
-	}
-	
-	public Color getColor(){
-		return color;
 	}
 	
 	public int getRow(){

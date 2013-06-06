@@ -90,8 +90,8 @@ public class start {
 			if (fullScreen){
 				Display.setDisplayMode(new DisplayMode(width, height));
 			}else{
-				//Display.setDisplayMode(new DisplayMode((int) (width * 0.75), (int) (height * 0.75)));
-				Display.setDisplayMode(new DisplayMode(1700, 800));
+				Display.setDisplayMode(new DisplayMode((int) (width * 0.75), (int) (height * 0.75)));
+//				Display.setDisplayMode(new DisplayMode(1700, 800));
 			}
 
 			Display.setVSyncEnabled(true);
@@ -99,8 +99,8 @@ public class start {
 			Display.sync(60);
 			Display.setTitle("Nim");
 
-			//Display.setLocation(100, 100);
-			Display.setLocation(1400, 100);
+			Display.setLocation(100, 100);
+//			Display.setLocation(1400, 100);
 
 			Display.create();
 		} catch (LWJGLException e) {
@@ -561,7 +561,8 @@ public class start {
 				//Generate a projectile on click and release
 				
 				
-
+				if (game.isWon()) continue;
+				
 				if (Mouse.getEventButtonState()){
 					firstProjectile = Projectile.createProjectileFromCamera(camera);
 					projectiles.add(firstProjectile);

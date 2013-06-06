@@ -8,6 +8,8 @@ public class Game {
 	private ArrayList<Line> _lines   = new ArrayList<Line>();
 	private boolean         _player1 = true;
 
+	private boolean 		_won = false;
+	
 	/**
 	 * Initializes the {@link Board} using it's default constructor.
 	 */
@@ -119,11 +121,13 @@ public class Game {
 				}
 			}
 		}
-
+		if (!_won && win) _won = true;
+		
 		return win;
 	}
 
 	private void doWin(){
+		_won = true;
 		if (_player1){
 			//player1 lost
 			System.out.println("Player 2 wins!");
@@ -132,6 +136,10 @@ public class Game {
 			//player2 lost
 			System.out.println("Player 1 wins!");
 		}
+	}
+	
+	public boolean isWon(){
+		return _won;
 	}
 
 }
