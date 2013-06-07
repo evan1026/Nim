@@ -48,7 +48,7 @@ public class start {
 	private static boolean playerTurn = true; //false then true
 
 	//									Neutral		Player 1	Player 2
-	public static Color[] teamColor = {Color.GREEN, Color.RED, Color.BLUE};
+	public final static Color[] teamColor = {Color.GREEN, Color.RED, Color.BLUE};
 
 	private static int boardSize = 5;
 
@@ -180,6 +180,12 @@ public class start {
 		camera.initPerspective();
 	}
 
+	/**
+	 * Not really much physics in here, despite the name. Anyway it has 3 main functions: <br />
+	 * &nbsp;1) Kill {@link Projectile}s that go out of bounds, as well as the ones they were paired with, and the {@link Rope} they were connected with. <br />
+	 * &nbsp;2) Stick {@link Projectile}s to {@link Target}s when they collide; <br />
+	 * &nbsp;3) Do {@link Game} logic to deal with capturing pieces and checking for a win.
+	 */
 	public static void physicsCalculations(){
 
 		for (int i = 0; i < projectiles.size(); i++){
@@ -264,12 +270,6 @@ public class start {
 		
 		
 	}
-
-
-
-
-
-
 
 	private static void render(){
 
@@ -496,7 +496,6 @@ public class start {
 
 	}
 
-
 	private static void renderSphere(Point3D pos, Color color, int drawStyle, Rotation rotation,  float radius, int row, int col) {
 		glPushMatrix();
 
@@ -517,7 +516,6 @@ public class start {
 	private static void renderSphere(Point3D pos, Color color, int drawStyle, Rotation rotation,  float radius) {
 		renderSphere(pos, color, drawStyle, rotation, radius, (int) (radius * 75), (int) (radius * 75));
 	}
-
 
 	private static void checkInput(){
 
@@ -587,6 +585,9 @@ public class start {
 
 	}
 	
+	/**
+	 * Marks problematic {@link Projectile}s for destruction.
+	 */
 	public static void destroyOpposition(){
 		
 		for (int i = 0; i < projectiles.size(); i++){
@@ -597,7 +598,12 @@ public class start {
 		
 	}
 	
-	
+	/**
+	 * Attempts to claim pieces, and returns based on the success.
+	 * @param target1 The {@link Target} claimed by the first {@link Projectile}.
+	 * @param target2 The {@link Target} claimed by the second {@link Projectile}.
+	 * @return True if it was successful. False otherwise (if pieces are not in same row/already claimed/etc.).
+	 */
 	public static boolean tryDoGameMove(Target target1, Target target2){
 		
 		if (target1.getRow() != target2.getRow()) return false;
@@ -611,22 +617,22 @@ public class start {
 		return game.tryRemoveSelection(tempRow, target1.getColomn(), tempDiffCol + 1);
 		
 	}
-	
-	
-	public static boolean getPlayerTurn(){
-		return playerTurn;
-	}
 
+	/**
+	 * 
+	 * @param degrees The angle to calculate, in degrees.
+	 * @return The sine of that angle.
+	 */
 	public static double degSin(double degrees){
 		return Math.sin(Math.toRadians(degrees));
 	}
 
+	/**
+     * 
+     * @param degrees The angle to calculate, in degrees.
+     * @return The cosine of that angle.
+     */
 	public static double degCos(double degrees){
 		return Math.cos(Math.toRadians(degrees));
 	}
-
-
-
-
-
 }

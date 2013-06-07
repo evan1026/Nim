@@ -5,13 +5,12 @@ import java.util.ArrayList;
 public class Game {
 
 	private Board           _board;
-	private ArrayList<Line> _lines   = new ArrayList<Line>();
+	
 	private boolean         _player1 = true;
-
-	private boolean 		_won = false;
+	private boolean 		_won     = false;
 	
 	/**
-	 * Initializes the {@link Board} using it's default constructor.
+	 * Initializes the {@link Board} using its default constructor.
 	 */
 	public Game(){
 		_board = new Board();
@@ -45,17 +44,17 @@ public class Game {
 	
 	/**
 	 * 
-	 * @return Boolean representing the current player taking a turn
+	 * @return Boolean representing if it's player 1's turn.
 	 */
 	
-	public boolean getPlayer(){
+	public boolean isPlayer1Turn(){
 		return _player1;
 	}
 	
 
 	/**
 	 * 
-	 * @return The whole board, as an {@link ArrayList} of boolean arrays
+	 * @return The whole board, as an {@link ArrayList} of int arrays
 	 */
 	public ArrayList<int[]> getBoard(){
 		return _board.getBoard();
@@ -64,7 +63,7 @@ public class Game {
 	/**
 	 * 
 	 * @param row Zero based
-	 * @return the row, as a boolean[]
+	 * @return the row, as an int[]
 	 */
 	public int[] getRow(int row){
 		return _board.getRow(row);
@@ -74,7 +73,7 @@ public class Game {
 	 * 
 	 * @param row Zero based
 	 * @param index Zero based
-	 * @return the piece, as a boolean
+	 * @return the piece, as an int
 	 */
 	public int getPiece(int row, int index){
 		return _board.getPiece(row, index);
@@ -85,10 +84,6 @@ public class Game {
 	 */
 	public void printBoard(){
 		System.out.println(_board.toString());
-	}
-	
-	public ArrayList<Line> getLines(){
-		return _lines;
 	}
 
 	//Make sure length is 1 based
@@ -108,7 +103,6 @@ public class Game {
 		for (int i = startIndex; i < startIndex + length; i++){
 			_board.setPiece(rowIndex, i, _player1 ? Board.PLAYER_ONE : Board.PLAYER_TWO);
 		}
-		_lines.add(new Line(rowIndex, startIndex, startIndex + length));
 		_player1 = !_player1;
 	}
 

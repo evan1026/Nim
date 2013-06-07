@@ -6,9 +6,9 @@ public class Board {
 	
 	private ArrayList<int[]> _pieces;
 	
-	public static int PLAYER_NEUTRAL = 0;
-	public static int PLAYER_ONE     = 1;
-	public static int PLAYER_TWO     = 2;
+	public static final int PLAYER_NEUTRAL = 0;
+	public static final int PLAYER_ONE     = 1;
+	public static final int PLAYER_TWO     = 2;
 	
 	/**
 	 * Calls the other constructor, sending 5 as the size.
@@ -19,7 +19,7 @@ public class Board {
 	
 	/**
 	 * Sets up the {@link ArrayList} that represents the board. The indices of the {@link ArrayList} start at zero and go top to bottom.
-	 * It is and {@link ArrayList} of boolean arrays, and the size of each array starts at one and increases by 1 for each subsequent row.
+	 * It is an {@link ArrayList} of int arrays, and the size of each array starts at one and increases by 1 for each subsequent row.
 	 * @param size The amount of rows to have
 	 */
 	public Board(int size){
@@ -36,7 +36,7 @@ public class Board {
 	
 	/**
 	 * 
-	 * @return The whole board, as an {@link ArrayList} of boolean arrays
+	 * @return The whole board, as an {@link ArrayList} of int arrays
 	 */
 	public ArrayList<int[]> getBoard(){
 		return _pieces;
@@ -49,7 +49,7 @@ public class Board {
 	/**
 	 * 
 	 * @param row Zero based
-	 * @return the row, as a boolean[]
+	 * @return the row, as an int[]
 	 */
 	public int[] getRow(int row){
 		
@@ -72,7 +72,7 @@ public class Board {
 	 * 
 	 * @param row Zero based
 	 * @param index Zero based
-	 * @return the piece, as a boolean
+	 * @return the piece, as an int
 	 */
 	
 	public int getPiece(int row, int index){

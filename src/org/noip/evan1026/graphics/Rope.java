@@ -10,13 +10,20 @@ public class Rope {
 	
 	private boolean solidified = false;
 	
+	/**
+	 * Initializes the rope, which is simply defined by the two {@link Projectile}s that it's attached to.
+	 * @param proj1 The first {@link Projectile} the rope is attached to.
+	 * @param proj2 The second {@link Projectile} the rope is attached to.
+	 */
 	public Rope(Projectile proj1, Projectile proj2){
 		attachedProjectiles = new Projectile[2];
 		attachedProjectiles[0] = proj1;
 		attachedProjectiles[1] = proj2;
 	}
 	
-	
+	/**
+	 * Does some magic OpenGL stuff to draw the rope to the screen.
+	 */
 	public void draw(){
 		
 		if (lostProjectile()) return;
@@ -39,12 +46,18 @@ public class Rope {
 		
 	}
 	
-	
+	/**
+	 * 
+	 * @return The two {@link Projectile}s that define the rope.
+	 */
 	public Projectile[] getAttachedProjectiles(){
 		return attachedProjectiles;
 	}
 	
-	
+	/**
+	 * 
+	 * @return True if either {@link Projectile} is out of bounds or has been marked to be destroyed.
+	 */
 	public boolean lostProjectile(){
 		for (int i = 0; i < attachedProjectiles.length; i++){
 			if (attachedProjectiles[i].isOutOfZone() || attachedProjectiles[i].isToBeDestroyed()) return true; 
@@ -52,10 +65,18 @@ public class Rope {
 		return false;
 	}
 	
+	/**
+	 * 
+	 * @param solidified Whether or not the rope is "solidified." It is considered solidified when it is connecting two {@link Projectile}s that are both on valid spheres to be connected.
+	 */
 	public void setSolidified(boolean solidified){
 		this.solidified = solidified;
 	}
 	
+	/**
+	 * 
+	 * @return Whether or not the rope is "solidified." See setSolidified for a further explaination.
+	 */
 	public boolean isSolidified(){
 		return solidified;
 	}
