@@ -38,18 +38,16 @@ public class Rope {
 		Point3D p1 = attachedProjectiles[0].getPosition();
 		Point3D p2 = attachedProjectiles[1].getPosition();
 
-		float tPitch, tYaw, tRoll;
-		float dX = p2.x - p1.x, dY = p2.y - p1.y, dZ = p2.z - p1.z;
+		Point3D p = new Point3D(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
+		Point3D z = new Point3D(0,0,1);
 		
-		dY *= -1;
-		dZ *= -1;
+		Point3D t = new Point3D(z.y * p.z - p.y * z.z, z.z * p.x - p.z * z.x, z.x * p.y - p.x * z.y);
 		
-		System.out.println( Math.toDegrees(Math.atan2(1, 1)) );
-		tPitch = (float) ( ( Math.toDegrees(Math.atan2(dZ, dY)) + 270) % 360 );
-		tYaw = (float) ( ( Math.toDegrees(Math.atan2(dX, dZ)) + 0 ) % 360  );
-		tRoll = 0;
+		double dotProd = z.x * p.x + z.y * p.y + z.z * p.z;
+		float angle = (float) Math.acos(dotProd / 3f);
 		
-		float distBetweenProjs = (float) Math.sqrt(dX*dX + dY*dY + dZ*dZ);
+		
+		float distBetweenProjs = (float) Math.sqrt(p.x * p.x + p.y*p.y + p.z*p.z);
 		
 		if (solidified){
 			glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
@@ -61,13 +59,11 @@ public class Rope {
 		glPushMatrix();
 		glTranslatef(-p1.x, -p1.y,  -p1.z); //center of base of cylinder at proj1 point
 		
-		glRotatef(tPitch, 1, 0, 0);
-		glRotatef(tYaw, 0, 1, 0);
-		glRotatef(tRoll, 0, 0, 1);
+		glRotatef(angle, t.x, t.y, t.z);
 		
 		Cylinder patCyl = new Cylinder();
 		patCyl.setDrawStyle(GLU.GLU_LINE);
-		patCyl.draw(0.5f, 0.5f, distBetweenProjs, 20, 20); //basically sets the radius, and number of rows/columns of
+		patCyl.draw(0.1f, 0.1f, distBetweenProjs, 20, 20); //basically sets the radius, and number of rows/columns of
 		//vertices that make up the circle
 		glPopMatrix(); //remove any translations made
 
