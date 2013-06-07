@@ -50,7 +50,7 @@ public class Target {
 	}
 
 	/**
-	 * Does some magic OpenGL stuff to draw the rope to the screen.
+	 * Does some magic OpenGL stuff to draw the target to the screen.
 	 */
 	public void draw(){
 
