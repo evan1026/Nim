@@ -617,6 +617,15 @@ public class start {
 		return game.tryRemoveSelection(tempRow, target1.getColomn(), tempDiffCol + 1);
 		
 	}
+	
+	public static void doOtherWin(){
+		
+		if (){
+			
+		}
+		
+	}
+	
 
 	/**
 	 * 

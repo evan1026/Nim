@@ -2,12 +2,16 @@ package org.noip.evan1026;
 
 import java.util.ArrayList;
 
+import org.noip.evan1026.graphics.start;
+
 public class Game {
 
 	private Board           _board;
 	
 	private boolean         _player1 = true;
 	private boolean 		_won     = false;
+	
+	private boolean 		_winningPlayer;
 	
 	/**
 	 * Initializes the {@link Board} using its default constructor.
@@ -125,6 +129,7 @@ public class Game {
 
 	private void doWin(){
 		_won = true;
+		_winningPlayer = _player1;
 		if (_player1){
 			//player1 lost
 			System.out.println("Player 2 wins!");
@@ -133,6 +138,8 @@ public class Game {
 			//player2 lost
 			System.out.println("Player 1 wins!");
 		}
+		
+		start.doOtherWin();
 	}
 	
 	/**
@@ -141,6 +148,13 @@ public class Game {
 	 */
 	public boolean isWon(){
 		return _won;
+	}
+	
+	public boolean getWinningPlayer(){
+		if (!isWon()){
+			return false;//blah
+		}
+		return _winningPlayer;
 	}
 
 }
