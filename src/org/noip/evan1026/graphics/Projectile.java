@@ -27,7 +27,7 @@ public class Projectile {
 
 	private static int drawStyle = GLU.GLU_LINE; 
 
-	private double speedConstant = 1.0;
+	private double speedConstant = 2.0;
 
 	private boolean stuck = false;
 	

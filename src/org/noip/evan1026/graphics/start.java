@@ -90,8 +90,8 @@ public class start {
 			if (fullScreen){
 				Display.setDisplayMode(new DisplayMode(width, height));
 			}else{
-				Display.setDisplayMode(new DisplayMode((int) (width * 0.75), (int) (height * 0.75)));
-//				Display.setDisplayMode(new DisplayMode(1700, 800));
+//				Display.setDisplayMode(new DisplayMode((int) (width * 0.75), (int) (height * 0.75)));
+				Display.setDisplayMode(new DisplayMode(1700, 800));
 			}
 
 			Display.setVSyncEnabled(true);
@@ -99,8 +99,8 @@ public class start {
 			Display.sync(60);
 			Display.setTitle("Nim");
 
-			Display.setLocation(0, 0);
-//			Display.setLocation(1400, 100);
+//			Display.setLocation(0, 0);
+			Display.setLocation(1400, 100);
 
 			Display.create();
 		} catch (LWJGLException e) {
@@ -290,7 +290,6 @@ public class start {
 
 		Color[] cube1 = {Color.PINK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA};
 
-		renderCube(0.5, cube1, 0, 3, -5);
 
 		//draw platform cylinder
 		glColor3f(0.5f, 0.2f, 0.8f);
@@ -334,167 +333,7 @@ public class start {
 
 	}
 
-	private static void renderCube(double sideLength, Color[] vColors, double xCenter, double yCenter, double zCenter){
-		double halfLength = sideLength / 2.0;
-
-		//vColors should have 8 colors - because 8 vertices (corners)
-
-		/** Color Indexes List **
-		 * near top left =		0
-		 * near top right =		1
-		 * near bottom left =	2
-		 * near bottom right =	3
-		 * 
-		 * far top left =		4
-		 * far top right =		5
-		 * far bottom left =	6
-		 * far bottom right =	7
-		 */
-
-		if (vColors.length != 8) {
-			throw new InvalidParameterException( "Wrong Length of color array to fill all vertices" );
-		}
-
-		//HORRIBLY DEPRECATED GLBEGIN AND QUADS BLARGH
-		//TODO, try to use vertices or circles later
-
-
-		//Vertices are now described as if you are looking straight on
-		//at the face of the side
-
-		//==============================
-		//====		BACK			====
-		//==============================
-		//z is all the same
-		glBegin(GL11.GL_QUADS);
-		//top left
-		glColor3d(vColors[5].getRed()/255.0, vColors[5].getGreen()/255.0, vColors[5].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter + halfLength, zCenter - halfLength);
-		//bottom left
-		glColor3d(vColors[7].getRed()/255.0, vColors[7].getGreen()/255.0, vColors[7].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter - halfLength, zCenter - halfLength);
-		//bottom right
-		glColor3d(vColors[6].getRed()/255.0, vColors[6].getGreen()/255.0, vColors[6].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter - halfLength, zCenter - halfLength);
-		//top right
-		glColor3d(vColors[4].getRed()/255.0, vColors[4].getGreen()/255.0, vColors[4].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter + halfLength, zCenter - halfLength);
-
-		glEnd();
-
-
-		//==============================
-		//====		FRONT			====
-		//==============================
-		//z is all the same
-		glBegin(GL11.GL_QUADS);
-		//top left
-		glColor3d(vColors[0].getRed()/255.0, vColors[0].getGreen()/255.0, vColors[0].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter + halfLength, zCenter + halfLength);
-		//bottom left
-		glColor3d(vColors[2].getRed()/255.0, vColors[2].getGreen()/255.0, vColors[2].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter - halfLength, zCenter + halfLength);
-		//bottom right
-		glColor3d(vColors[3].getRed()/255.0, vColors[3].getGreen()/255.0, vColors[3].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter - halfLength, zCenter + halfLength);
-
-		//top right
-		glColor3d(vColors[1].getRed()/255.0, vColors[1].getGreen()/255.0, vColors[1].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter + halfLength, zCenter + halfLength);
-
-		glEnd();
-
-		//==============================
-		//====		LEFT			====
-		//==============================
-		//right is towards screen
-		//x is all the same
-		glBegin(GL11.GL_QUADS);
-		//top left
-		glColor3d(vColors[4].getRed()/255.0, vColors[4].getGreen()/255.0, vColors[4].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter + halfLength, zCenter - halfLength);
-		//bottom left
-		glColor3d(vColors[6].getRed()/255.0, vColors[6].getGreen()/255.0, vColors[6].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter - halfLength, zCenter - halfLength);
-		//bottom right
-		glColor3d(vColors[2].getRed()/255.0, vColors[2].getGreen()/255.0, vColors[2].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter - halfLength, zCenter + halfLength);
-		//top right
-		glColor3d(vColors[0].getRed()/255.0, vColors[0].getGreen()/255.0, vColors[0].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter + halfLength, zCenter + halfLength);
-
-
-		glEnd();
-
-
-		//==============================
-		//====		RIGHT			====
-		//==============================
-		//left is towards the screen
-		//x is all the same
-		glBegin(GL11.GL_QUADS);
-		//top left
-		glColor3d(vColors[1].getRed()/255.0, vColors[1].getGreen()/255.0, vColors[1].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter + halfLength, zCenter + halfLength);
-		//bottom left
-		glColor3d(vColors[3].getRed()/255.0, vColors[3].getGreen()/255.0, vColors[3].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter - halfLength, zCenter + halfLength);
-		//bottom right
-		glColor3d(vColors[7].getRed()/255.0, vColors[7].getGreen()/255.0, vColors[7].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter - halfLength, zCenter - halfLength);
-		//top right
-		glColor3d(vColors[5].getRed()/255.0, vColors[5].getGreen()/255.0, vColors[5].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter + halfLength, zCenter - halfLength);
-
-
-		glEnd();
-
-
-		//==============================
-		//====		TOP			====
-		//==============================
-		//y is all the same
-
-		glBegin(GL11.GL_QUADS);
-		//top left
-		glColor3d(vColors[4].getRed()/255.0, vColors[4].getGreen()/255.0, vColors[4].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter + halfLength, zCenter - halfLength);
-		//bottom left
-		glColor3d(vColors[0].getRed()/255.0, vColors[0].getGreen()/255.0, vColors[0].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter + halfLength, zCenter + halfLength);
-		//bottom right
-		glColor3d(vColors[1].getRed()/255.0, vColors[1].getGreen()/255.0, vColors[1].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter + halfLength, zCenter + halfLength);
-		//top right
-		glColor3d(vColors[5].getRed()/255.0, vColors[5].getGreen()/255.0, vColors[5].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter + halfLength, zCenter - halfLength);
-
-		glEnd();
-
-		//==============================
-		//====		BOTTOM			====
-		//==============================
-		//y is all the same
-
-		glBegin(GL11.GL_QUADS);
-		//top left
-		glColor3d(vColors[2].getRed()/255.0, vColors[2].getGreen()/255.0, vColors[2].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter - halfLength, zCenter + halfLength);
-		//bottom left
-		glColor3d(vColors[6].getRed()/255.0, vColors[6].getGreen()/255.0, vColors[6].getBlue()/255.0);
-		glVertex3d(xCenter - halfLength, yCenter - halfLength, zCenter - halfLength);
-		//bottom right
-		glColor3d(vColors[7].getRed()/255.0, vColors[7].getGreen()/255.0, vColors[7].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter - halfLength, zCenter - halfLength);
-		//top right
-		glColor3d(vColors[3].getRed()/255.0, vColors[3].getGreen()/255.0, vColors[3].getBlue()/255.0);
-		glVertex3d(xCenter + halfLength, yCenter - halfLength, zCenter + halfLength);
-
-
-		glEnd();
-
-
-	}
+	
 
 	private static void renderSphere(Point3D pos, Color color, int drawStyle, Rotation rotation,  float radius, int row, int col) {
 		glPushMatrix();
@@ -620,8 +459,21 @@ public class start {
 	
 	public static void doOtherWin(){
 		
-		if (){
-			
+		boolean winPlayer = game.getWinningPlayer();
+		Color winColor = (winPlayer) ? teamColor[1] : teamColor[2];
+		
+		for (int i = 0; i < projectiles.size(); i++){
+			projectiles.get(i).setColor(winColor);
+		}
+		
+		//change all pices to the winning teams color
+		for (int i = 0; i < game.getBoard().size(); i++){
+			for (int j = 0; j < game.getBoard().get(i).length; j++){
+				game.getBoard().get(i)[j] = (winPlayer) ? 1 : 2;
+			}
+		}
+		for (int i = 0; i < ropes.size(); i++){
+			ropes.get(i).setColor(winColor);
 		}
 		
 	}

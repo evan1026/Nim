@@ -25,7 +25,7 @@ public class Rope {
 		attachedProjectiles = new Projectile[2];
 		attachedProjectiles[0] = proj1;
 		attachedProjectiles[1] = proj2;
-		color = proj1.getColor();
+		color = proj2.getColor();
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public class Rope {
 		
 		Cylinder patCyl = new Cylinder();
 		patCyl.setDrawStyle(GLU.GLU_LINE);
-		patCyl.draw(0.1f, 0.1f, distBetweenProjs, 20, 20); //basically sets the radius, and number of rows/columns of
+		patCyl.draw(Projectile.radius, Projectile.radius, distBetweenProjs, 20, 20); //basically sets the radius, and number of rows/columns of
 		//vertices that make up the circle
 		glPopMatrix(); //remove any translations made
 
@@ -130,6 +130,13 @@ public class Rope {
 		return solidified;
 	}
 	
+	public void setColor(Color c){
+		color = c;
+	}
+	
+	public Color getColor(){
+		return color;
+	}
 
 
 }
