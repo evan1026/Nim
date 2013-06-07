@@ -27,7 +27,7 @@ public class Rope {
 		attachedProjectiles[1] = proj2;
 		color = proj1.getColor();
 	}
-
+	
 	/**
 	 * Does some magic OpenGL stuff to draw the rope to the screen.
 	 */

@@ -99,7 +99,7 @@ public class start {
 			Display.sync(60);
 			Display.setTitle("Nim");
 
-			Display.setLocation(100, 100);
+			Display.setLocation(0, 0);
 //			Display.setLocation(1400, 100);
 
 			Display.create();
@@ -617,6 +617,15 @@ public class start {
 		return game.tryRemoveSelection(tempRow, target1.getColomn(), tempDiffCol + 1);
 		
 	}
+	
+	public static void doOtherWin(){
+		
+		if (){
+			
+		}
+		
+	}
+	
 
 	/**
 	 * 
