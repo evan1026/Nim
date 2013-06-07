@@ -38,16 +38,20 @@ public class Rope {
 		Point3D p1 = attachedProjectiles[0].getPosition();
 		Point3D p2 = attachedProjectiles[1].getPosition();
 
-		float tPitch, tYaw, tRoll;
+		float tPitch = 0, tYaw = 0, tRoll = 0;
 		float dX = p2.x - p1.x, dY = p2.y - p1.y, dZ = p2.z - p1.z;
-		
-		dY *= -1;
 		dZ *= -1;
 		
-		System.out.println( Math.toDegrees(Math.atan2(1, 1)) );
-		tPitch = (float) ( ( Math.toDegrees(Math.atan2(dZ, dY)) + 270) % 360 );
-		tYaw = (float) ( ( Math.toDegrees(Math.atan2(dX, dZ)) + 0 ) % 360  );
-		tRoll = 0;
+		//+dX is right +dY is up +dZ is into screen
+		
+		
+		tPitch = (float) Math.toDegrees(Math.atan2(dY, dZ));
+		tYaw = -(float) Math.toDegrees(Math.atan2(dX, dZ));
+		
+		
+		System.out.println("DX=" + dX + "DY=" + dY + "DZ=" + dZ);
+		System.out.println("Pitch: " + tPitch + "\tYaw" + tYaw);
+		
 		
 		float distBetweenProjs = (float) Math.sqrt(dX*dX + dY*dY + dZ*dZ);
 		
@@ -61,13 +65,15 @@ public class Rope {
 		glPushMatrix();
 		glTranslatef(-p1.x, -p1.y,  -p1.z); //center of base of cylinder at proj1 point
 		
-		glRotatef(tPitch, 1, 0, 0);
 		glRotatef(tYaw, 0, 1, 0);
+		
+		glRotatef(tPitch, 1, 0, 0);
+		
 		glRotatef(tRoll, 0, 0, 1);
 		
 		Cylinder patCyl = new Cylinder();
 		patCyl.setDrawStyle(GLU.GLU_LINE);
-		patCyl.draw(0.5f, 0.5f, distBetweenProjs, 20, 20); //basically sets the radius, and number of rows/columns of
+		patCyl.draw(0.25f, 0.25f, distBetweenProjs, 20, 20); //basically sets the radius, and number of rows/columns of
 		//vertices that make up the circle
 		glPopMatrix(); //remove any translations made
 
