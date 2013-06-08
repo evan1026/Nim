@@ -2,6 +2,9 @@ package org.noip.evan1026;
 
 import java.util.ArrayList;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
 import org.noip.evan1026.graphics.start;
 
 public class Game {
@@ -140,6 +143,17 @@ public class Game {
 		}
 		
 		start.doOtherWin();
+		
+		start.setMouseControl(false);
+		
+		new Thread(){
+			public void run(){
+				JOptionPane.showMessageDialog(null, ((_winningPlayer) ? "Player 1: (RED)" : "Player 2: (BLUE)") + " Wins!\nShoot again to replay.\n\nLoser goes first!"  );
+				start.setMouseControl(true);
+			}
+		}.start();
+		
+		
 	}
 	
 	/**
@@ -155,6 +169,10 @@ public class Game {
 			return false;//blah
 		}
 		return _winningPlayer;
+	}
+	
+	public void setPlayerTurn(boolean player1Turn){ //necessary for "fair" replays
+		_player1 = player1Turn;
 	}
 
 }

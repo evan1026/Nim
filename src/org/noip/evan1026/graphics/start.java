@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 
 import org.lwjgl.LWJGLException;
@@ -39,7 +40,7 @@ public class start {
 
 
 	private static ArrayList<Target> targets;
-	private static Point3D targetsPosition = new Point3D(-5, -3, 5);
+	private static Point3D targetsPosition = new Point3D(-4, -3, 5);
 
 
 	private static ArrayList<Rope> ropes;
@@ -47,7 +48,7 @@ public class start {
 
 	private static boolean playerTurn = true; //false then true
 
-	//									Neutral		Player 1	Player 2
+	//										Neutral		Player 1	Player 2
 	public final static Color[] teamColor = {Color.GREEN, Color.RED, Color.BLUE};
 
 	private static int boardSize = 5;
@@ -56,7 +57,7 @@ public class start {
 	private static float roomSpin = 0;
 
 
-	public static void main(String[] args){
+	public static void begin(String[] args){
 
 		initDisplay();
 		initScene();
@@ -90,8 +91,8 @@ public class start {
 			if (fullScreen){
 				Display.setDisplayMode(new DisplayMode(width, height));
 			}else{
-//				Display.setDisplayMode(new DisplayMode((int) (width * 0.75), (int) (height * 0.75)));
-				Display.setDisplayMode(new DisplayMode(1700, 800));
+				Display.setDisplayMode(new DisplayMode((int) (width * 0.75), (int) (height * 0.75)));
+//				Display.setDisplayMode(new DisplayMode(1700, 800));
 			}
 
 			Display.setVSyncEnabled(true);
@@ -100,7 +101,7 @@ public class start {
 			Display.setTitle("Nim");
 
 //			Display.setLocation(0, 0);
-			Display.setLocation(1400, 100);
+//			Display.setLocation(1400, 100);
 
 			Display.create();
 		} catch (LWJGLException e) {
@@ -212,10 +213,6 @@ public class start {
 				}
 			}
 		}
-		
-		
-		//TODO do stuff to targets here taking info from game logic
-		
 		
 
 		for (int i = 0; i < ropes.size(); i++){
@@ -398,15 +395,19 @@ public class start {
 				//Generate a projectile on click and release
 				
 				
-				if (game.isWon()) continue;
+				if (game.isWon()){
+					
+					resetGame();
+					continue; 
+				}
 				
 				if (Mouse.getEventButtonState()){
 					firstProjectile = Projectile.createProjectileFromCamera(camera);
 					projectiles.add(firstProjectile);
 				}else{
+					if (firstProjectile == null) continue;
 					secondProjectile = Projectile.createProjectileFromCamera(camera);
 					projectiles.add(secondProjectile);
-
 					
 					ropes.add(new Rope(firstProjectile, secondProjectile));
 				}
@@ -414,8 +415,6 @@ public class start {
 				destroyOpposition();
 				
 
-				
-				
 			}
 			
 			
@@ -478,7 +477,24 @@ public class start {
 		
 	}
 	
+	
+	public static void resetGame(){
+		//it's a whole new game!
+		boolean lastWinPlayer = game.getWinningPlayer();
+		
+		initGame(); 
+		firstProjectile = null; 
+		secondProjectile = null;
+		game.setPlayerTurn(!lastWinPlayer);
+		
+	}
 
+	
+	public static void setMouseControl(boolean mControl){
+		mouseControl = mControl;
+		Mouse.setGrabbed(mControl);
+	}
+	
 	/**
 	 * 
 	 * @param degrees The angle to calculate, in degrees.
@@ -496,4 +512,7 @@ public class start {
 	public static double degCos(double degrees){
 		return Math.cos(Math.toRadians(degrees));
 	}
+	
+	
+	
 }

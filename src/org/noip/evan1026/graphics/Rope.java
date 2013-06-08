@@ -81,18 +81,6 @@ public class Rope {
 		glPopMatrix(); //remove any translations made
 
 
-//		glLineWidth(0.5f);
-//		glBegin(GL_LINES);
-//		
-//
-//
-//
-//
-//		glVertex3f(-p1.x, -p1.y, -p1.z);
-//		glVertex3f(-p2.x, -p2.y, -p2.z);
-//
-//		glEnd();
-
 	}
 
 	/**
