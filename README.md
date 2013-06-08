@@ -10,7 +10,7 @@ Depending on your operating system, you may need to set
 the executable bit to give it permissions to be executed. (Only Linux and Mac I think?)
 
 --------------------------------------------------------------------------------
-How to Play:
+###How to Play:
 
 --------------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ To slash out multiple spheres, shoot a projectile a sphere, and the second at a 
 
 
 --------------------------------------------------------------------------------
-Game Controls:
+###Game Controls:
 
 --------------------------------------------------------------------------------
 
@@ -45,4 +45,4 @@ Sorry for large file size, cross-platform graphics libraries tend to do that.
 Official Github Repository (with pretty code submission graphs) for the project:
 https://github.com/evan1026/Nim
 
-Download the zipped file from [dropbox](https://dl.dropboxusercontent.com/u/16835571/Nim-EvanAllan_BrianDecker-Final.zip)
+Download the zipped file from [dropbox](https://dl.dropboxusercontent.com/u/16835571/Nim-EvanAllan_BrianDecker-Final.zip).
