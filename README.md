@@ -1,6 +1,7 @@
 Nim
 ================================================================================
-by Evan Allan and Brian Decker
+######by Evan Allan and Brian Decker
+
 --------------------------------------------------------------------------------
 Works on Linux/Mac/Windows
 
@@ -10,6 +11,7 @@ the executable bit to give it permissions to be executed. (Only Linux and Mac I 
 
 --------------------------------------------------------------------------------
 How to Play:
+
 --------------------------------------------------------------------------------
 
 Use projectiles fired by pressing and releasing the left mouse button to 'draw'
@@ -25,6 +27,7 @@ To slash out multiple spheres, shoot a projectile a sphere, and the second at a 
 
 --------------------------------------------------------------------------------
 Game Controls:
+
 --------------------------------------------------------------------------------
 
 Q : to quit at any time
