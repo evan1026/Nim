@@ -4,11 +4,7 @@ package org.noip.evan1026.graphics;
 import org.noip.evan1026.*;
 import java.awt.Color;
 import java.awt.Toolkit;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Properties;
-
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -45,8 +41,6 @@ public class start {
 
 	private static ArrayList<Rope> ropes;
 
-
-	private static boolean playerTurn = true; //false then true
 
 	//										Neutral		Player 1	Player 2
 	public final static Color[] teamColor = {Color.GREEN, Color.RED, Color.BLUE};
@@ -121,9 +115,6 @@ public class start {
 		ropes = new ArrayList<Rope>();
 
 		float spherePadding = 0.25f;
-
-		//full width of triangle is the diameter of all the balls plus the padding at the base
-		float triFullWidth = boardSize * (Target.radius*2) + (spherePadding * (boardSize-1));
 
 		for (int triRow = 0; triRow < boardSize; triRow++){
 
@@ -285,9 +276,6 @@ public class start {
 
 		//renderSphereTriangle(-1.0f, 0.0f, -5.0f, Color.YELLOW, 0.25f, 5, 0.25f);
 
-		Color[] cube1 = {Color.PINK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA};
-
-
 		//draw platform cylinder
 		glColor3f(0.5f, 0.2f, 0.8f);
 		glPushMatrix();
@@ -349,6 +337,7 @@ public class start {
 		glPopMatrix(); //remove any translations made
 	}
 
+	@SuppressWarnings("unused")
 	private static void renderSphere(Point3D pos, Color color, int drawStyle, Rotation rotation,  float radius) {
 		renderSphere(pos, color, drawStyle, rotation, radius, (int) (radius * 75), (int) (radius * 75));
 	}

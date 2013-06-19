@@ -11,7 +11,6 @@ import java.awt.Color;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 import org.noip.evan1026.Board;
-import org.noip.evan1026.Game;
 
 public class Target {
 

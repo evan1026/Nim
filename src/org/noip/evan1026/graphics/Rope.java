@@ -1,8 +1,6 @@
 package org.noip.evan1026.graphics;
 
 import java.awt.Color;
-import java.util.ArrayList;
-
 import org.lwjgl.util.glu.Cylinder;
 import org.lwjgl.util.glu.GLU;
 

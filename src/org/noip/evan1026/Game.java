@@ -2,7 +2,6 @@ package org.noip.evan1026;
 
 import java.util.ArrayList;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.noip.evan1026.graphics.start;
